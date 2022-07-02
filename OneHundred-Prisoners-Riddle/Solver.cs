@@ -60,8 +60,8 @@ public class Solver
         var timer = new Stopwatch();
         timer.Start();
 
-        // var totalRepeatsWithSuccess = SolveParallel(maximumNumberOfSteps);
-        var totalRepeatsWithSuccess = SolveSequential(maximumNumberOfSteps);
+        var totalRepeatsWithSuccess = SolveParallel(maximumNumberOfSteps);
+        // var totalRepeatsWithSuccess = SolveSequential(maximumNumberOfSteps);
 
         timer.Stop();
 
@@ -79,13 +79,14 @@ public class Solver
     private int SolveParallel(int maximumNumberOfSteps)
     {
         var totalRepeatsWithSuccess = 0;
-        const int batchSize = 100;
+        const int concurrentSize = 2;
+        var batchSize = _repeats / concurrentSize;
         var actions = Enumerable
             .Range(0, _repeats)
             .Batch(batchSize)
             .Select(b => new Action(() => SolveBatch(b.Count(), () => Interlocked.Increment(ref totalRepeatsWithSuccess), maximumNumberOfSteps)));
 
-        Parallel.ForEach(actions, new ParallelOptions { MaxDegreeOfParallelism = 8 },a => a());
+        Parallel.ForEach(actions, a => a());
 
         return totalRepeatsWithSuccess;
     }
