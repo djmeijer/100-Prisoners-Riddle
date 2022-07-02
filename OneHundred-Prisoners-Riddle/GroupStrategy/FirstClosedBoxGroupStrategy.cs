@@ -4,14 +4,14 @@ public class FirstClosedBoxGroupStrategy : IGroupStrategy
 {
     public void Execute(int prisonerNumber, BoxCollection boxes)
     {
-        var boxNumber = boxes.GetClosedBoxes().First();
+        var firstClosedBoxNumber = boxes.GetClosedBoxNumber();
 
-        boxes.OpenBoxNumber(boxNumber);
+        boxes.OpenBoxNumber(firstClosedBoxNumber);
     }
 
     public void Reset()
     {
     }
 
-    public string Name => "Random: open the first box you see";
+    public string Name => "First closed: open the first box you see";
 }

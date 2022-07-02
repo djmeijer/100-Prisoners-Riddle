@@ -6,7 +6,7 @@ public class RandomFirstPersonStrategy : IFirstPersonStrategy
 {
     public BoxCollection Execute(BoxCollection boxes)
     {
-        var randomBoxes = boxes.GetClosedBoxes().Select(boxes.OpenBoxNumber).Shuffle().ToArray();
+        var randomBoxes = boxes.GetBoxes().Select(b => b.Value).Shuffle().ToArray();
         var newBoxes = new List<Box>
         {
             // Do the exchange.

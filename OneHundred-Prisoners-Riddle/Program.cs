@@ -7,7 +7,7 @@ using OneHundred_Prisoners_Riddle.FirstPersonStrategy;
 using OneHundred_Prisoners_Riddle.GroupStrategy;
 
 const int numberOfIterations = 2000;
-var numberOfPrisoners = new[] { 100, 250 };
+var numberOfPrisoners = new[] { 100, 200 };
 var groupStrategies = new Func<IGroupStrategy>[] { () => new CheatingGroupStrategy(), () => new FirstClosedBoxGroupStrategy(), () => new CircleGroupStrategy() };
 var firstPersonStrategies = new IFirstPersonStrategy[] { new DoNothingFirstPersonStrategy(), new RandomFirstPersonStrategy(), new BreakLongestCircleFirstPersonStrategy() };
 var runs = numberOfPrisoners.Cartesian(groupStrategies, firstPersonStrategies, (n, g, f) => new RunInfo(n, g, f));
@@ -18,7 +18,7 @@ var t = new Stopwatch();
 t.Start();
 
 Parallel
-    .ForEach(runs, (r, _, _) =>
+    .ForEach(runs, new ParallelOptions { MaxDegreeOfParallelism = 8 }, (r, _, _) =>
     {
         var result = new Solver()
             .SetNumberOfPrisoners(r.NumberOfPrisoners)

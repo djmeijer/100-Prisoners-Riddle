@@ -104,20 +104,20 @@ public class Solver
         var boxNumbers = Enumerable.Range(0, _numberOfPrisoners).Shuffle().ToArray();
         var slipNumbers = Enumerable.Range(0, _numberOfPrisoners).Shuffle().ToArray();
         var boxes = boxNumbers.Zip(slipNumbers, (b, s) => new Box(b, s)).ToArray();
+        var boxCollection = new BoxCollection(boxes);
         var prisonersWhoFoundThereSlipNumber = 0;
-        var strategy = _groupsStrategyCreator();
+        var groupStrategy = _groupsStrategyCreator();
 
         // Now calculate and output some interesting statistics about the box/slip placement.
         var isWinningConfig = false;
         if (_debug)
         {
-            var loops = Statistics.GetLoops(new BoxCollection(boxes));
+            var loops = Statistics.GetLoops(boxCollection);
             isWinningConfig = loops.All(l => l.Count <= 50);
             Console.WriteLine($"Loops {string.Join(",", loops.Select(l => l.Count))} {(isWinningConfig ? "winning" : "loosing" )}");   
         }
 
         // Let each prisoner execute the strategy
-        var boxCollection = new BoxCollection(boxes);
         for (var p = 0; p < _numberOfPrisoners; p++)
         {
             if (p == 0)
@@ -127,7 +127,7 @@ public class Solver
             
             for (var s = 0; s < maximumNumberOfSteps && !boxCollection.GetSeenSlipNumbers().Contains(p); s++)
             {
-                strategy.Execute(p, boxCollection);
+                groupStrategy.Execute(p, boxCollection);
             }
 
             var found = boxCollection.GetSeenSlipNumbers().Contains(p);
@@ -137,7 +137,7 @@ public class Solver
             }
 
             boxCollection.Reset();
-            strategy.Reset();
+            groupStrategy.Reset();
         }
 
         if (_debug)

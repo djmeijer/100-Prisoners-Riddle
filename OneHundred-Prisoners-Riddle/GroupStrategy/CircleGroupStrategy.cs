@@ -10,9 +10,8 @@ public class CircleGroupStrategy : IGroupStrategy
     {
         // Start at prisoner number. The next round, take the previously found slip number as box number.
         var aboutToOpenBoxNumber = _nextBoxNumber == -1 ? prisonerNumber : _nextBoxNumber;
-        var closedBoxNumbers = boxes.GetClosedBoxes();
         // When the box number we are about to open is already open, take a random other closed box.
-        var toOpenBoxNumber = closedBoxNumbers.Contains(aboutToOpenBoxNumber) ? aboutToOpenBoxNumber : closedBoxNumbers.First();
+        var toOpenBoxNumber = boxes.HasBoxNumberBeenOpened(aboutToOpenBoxNumber) ? boxes.GetClosedBoxNumber() : aboutToOpenBoxNumber;
         var currentBox = boxes.OpenBoxNumber(toOpenBoxNumber);
         _nextBoxNumber = currentBox.SlipNumber;   
     }
