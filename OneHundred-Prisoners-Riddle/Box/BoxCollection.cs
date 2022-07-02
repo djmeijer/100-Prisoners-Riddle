@@ -1,6 +1,6 @@
 using MoreLinq.Extensions;
 
-namespace OneHundred_Prisoners_Riddle;
+namespace OneHundred_Prisoners_Riddle.Box;
 
 public class BoxCollection
 {
@@ -12,10 +12,14 @@ public class BoxCollection
     public BoxCollection(IReadOnlyCollection<Box> boxes)
     {
         _boxes = new Dictionary<int, Box>(boxes.Count);
+        _closedBoxNumbers = new LinkedList<int>();
         _openBoxes = new Dictionary<int, Box>(boxes.Count);
         _seenSlipNumbers = new HashSet<int>(boxes.Count);
-        boxes.ForEach(b => _boxes[b.BoxNumber] = b);
-        _closedBoxNumbers = new LinkedList<int>(_boxes.Keys);
+        boxes.ForEach(b =>
+        {
+            _boxes[b.BoxNumber] = b;
+            _closedBoxNumbers.AddLast(b.BoxNumber);
+        });
     }
 
     public Box OpenBoxNumber(int boxNumber)
@@ -35,6 +39,15 @@ public class BoxCollection
     public bool HasBoxNumberBeenOpened(int boxNumber) => _openBoxes.ContainsKey(boxNumber);
 
     public HashSet<int> GetSeenSlipNumbers() => _seenSlipNumbers;
+
+    public BoxCollection ExchangeSlips(int firstBoxNumber, int secondBoxNumber)
+    {
+        var temp = _boxes[firstBoxNumber].SlipNumber;
+        _boxes[firstBoxNumber] = new Box(firstBoxNumber, _boxes[secondBoxNumber].SlipNumber);
+        _boxes[secondBoxNumber] = new Box(secondBoxNumber, temp);
+
+        return this;
+    }
 
     public void Reset()
     {

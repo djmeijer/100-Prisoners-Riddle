@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using MoreLinq;
+using OneHundred_Prisoners_Riddle.Box;
 using OneHundred_Prisoners_Riddle.FirstPersonStrategy;
 using OneHundred_Prisoners_Riddle.GroupStrategy;
 
@@ -104,7 +105,7 @@ public class Solver
         // Setup
         var boxNumbers = Enumerable.Range(0, _numberOfPrisoners).Shuffle().ToArray();
         var slipNumbers = Enumerable.Range(0, _numberOfPrisoners).Shuffle().ToArray();
-        var boxes = boxNumbers.Zip(slipNumbers, (b, s) => new Box(b, s)).ToArray();
+        var boxes = boxNumbers.Zip(slipNumbers, (b, s) => new Box.Box(b, s)).ToArray();
         var boxCollection = new BoxCollection(boxes);
         var prisonersWhoFoundThereSlipNumber = 0;
         var groupStrategy = _groupsStrategyCreator();

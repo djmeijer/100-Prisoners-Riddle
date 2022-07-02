@@ -1,4 +1,5 @@
 using MoreLinq;
+using OneHundred_Prisoners_Riddle.Box;
 
 namespace OneHundred_Prisoners_Riddle.FirstPersonStrategy;
 
@@ -6,19 +7,10 @@ public class RandomFirstPersonStrategy : IFirstPersonStrategy
 {
     public BoxCollection Execute(BoxCollection boxes)
     {
-        var randomBoxes = boxes.GetBoxes().Select(b => b.Value).Shuffle().ToArray();
-        var newBoxes = new List<Box>
-        {
-            // Do the exchange.
-            new(randomBoxes.First().BoxNumber, randomBoxes.Skip(1).First().SlipNumber),
-            new(randomBoxes.Skip(1).First().BoxNumber, randomBoxes.First().SlipNumber)
-        };
+        var randomBoxNumbers = Enumerable.Range(0, boxes.GetBoxes().Count).Shuffle().Take(2).ToArray();
 
-        // Add the rest.
-        randomBoxes.Skip(2).ForEach(b => newBoxes.Add(b));
-
-        return new BoxCollection(newBoxes);
+        return boxes.ExchangeSlips(randomBoxNumbers[0], randomBoxNumbers[1]);
     }
 
-    public string Name => "Open 2 random boxes, exchange flips";
+    public string Name => "Open 2 random boxes, exchange slips";
 }

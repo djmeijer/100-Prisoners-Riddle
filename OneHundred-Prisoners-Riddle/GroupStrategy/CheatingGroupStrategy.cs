@@ -1,4 +1,5 @@
 using MoreLinq;
+using OneHundred_Prisoners_Riddle.Box;
 
 namespace OneHundred_Prisoners_Riddle.GroupStrategy;
 

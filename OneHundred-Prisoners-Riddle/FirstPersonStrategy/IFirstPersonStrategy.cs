@@ -1,3 +1,5 @@
+using OneHundred_Prisoners_Riddle.Box;
+
 namespace OneHundred_Prisoners_Riddle.FirstPersonStrategy;
 
 public interface IFirstPersonStrategy
