@@ -57,21 +57,38 @@ public class Solver
     {
         var totalRepeatsWithSuccess = 0;
         var maximumNumberOfSteps = _numberOfPrisoners / 2;
-        const int batchSize = 250;
 
         var timer = new Stopwatch();
         timer.Start();
-        
+
+        // totalRepeatsWithSuccess = SolveParallel(maximumNumberOfSteps);
+        totalRepeatsWithSuccess = SolveSequential(maximumNumberOfSteps);
+
+        timer.Stop();
+
+        return new Result(_numberOfPrisoners, _groupsStrategyCreator().Name, _firstPersonStrategy.Name, (decimal)totalRepeatsWithSuccess / _repeats, _repeats, timer.ElapsedMilliseconds);
+    }
+
+    private int SolveSequential(int maximumNumberOfSteps)
+    {
+        var totalRepeatsWithSuccess = 0;
+        SolveBatch(_repeats, () => totalRepeatsWithSuccess++, maximumNumberOfSteps);
+
+        return totalRepeatsWithSuccess;
+    }
+
+    private int SolveParallel(int maximumNumberOfSteps)
+    {
+        var totalRepeatsWithSuccess = 0;
+        const int batchSize = 500;
         var actions = Enumerable
             .Range(0, _repeats)
             .Batch(batchSize)
             .Select(b => new Action(() => SolveBatch(b.Count(), () => Interlocked.Increment(ref totalRepeatsWithSuccess), maximumNumberOfSteps)));
 
-        Parallel.ForEach(actions, new ParallelOptions { MaxDegreeOfParallelism = 2 },a => a());
+        Parallel.ForEach(actions, new ParallelOptions { MaxDegreeOfParallelism = 8 },a => a());
 
-        timer.Stop();
-
-        return new Result((decimal)totalRepeatsWithSuccess / _repeats, timer.ElapsedMilliseconds);
+        return totalRepeatsWithSuccess;
     }
 
     private void SolveBatch(int batchSize, Action incrementSuccess, int maximumNumberOfSteps)
