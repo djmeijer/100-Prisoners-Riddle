@@ -55,14 +55,13 @@ public class Solver
 
     public Result Solve()
     {
-        var totalRepeatsWithSuccess = 0;
         var maximumNumberOfSteps = _numberOfPrisoners / 2;
 
         var timer = new Stopwatch();
         timer.Start();
 
-        // totalRepeatsWithSuccess = SolveParallel(maximumNumberOfSteps);
-        totalRepeatsWithSuccess = SolveSequential(maximumNumberOfSteps);
+        // var totalRepeatsWithSuccess = SolveParallel(maximumNumberOfSteps);
+        var totalRepeatsWithSuccess = SolveSequential(maximumNumberOfSteps);
 
         timer.Stop();
 
@@ -80,7 +79,7 @@ public class Solver
     private int SolveParallel(int maximumNumberOfSteps)
     {
         var totalRepeatsWithSuccess = 0;
-        const int batchSize = 500;
+        const int batchSize = 100;
         var actions = Enumerable
             .Range(0, _repeats)
             .Batch(batchSize)
@@ -102,12 +101,9 @@ public class Solver
     private void SolveSingleRun(Action incrementSuccess, int maximumNumberOfSteps)
     {
         // Setup
-        var availableBoxNumbers = new Stack<int>(Enumerable.Range(0, _numberOfPrisoners).Shuffle());
-        var availableSlipNumbers = new Stack<int>(Enumerable.Range(0, _numberOfPrisoners).Shuffle());
-        var boxes = Enumerable
-            .Range(0, _numberOfPrisoners)
-            .Select(_ => new Box(availableBoxNumbers.Pop(), availableSlipNumbers.Pop()))
-            .ToArray();
+        var boxNumbers = Enumerable.Range(0, _numberOfPrisoners).Shuffle().ToArray();
+        var slipNumbers = Enumerable.Range(0, _numberOfPrisoners).Shuffle().ToArray();
+        var boxes = boxNumbers.Zip(slipNumbers, (b, s) => new Box(b, s)).ToArray();
         var prisonersWhoFoundThereSlipNumber = 0;
         var strategy = _groupsStrategyCreator();
 

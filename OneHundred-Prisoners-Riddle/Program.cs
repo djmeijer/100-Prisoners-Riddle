@@ -18,7 +18,7 @@ var t = new Stopwatch();
 t.Start();
 
 Parallel
-    .ForEach(runs, new ParallelOptions { MaxDegreeOfParallelism = 8 }, (r, _, _) =>
+    .ForEach(runs, (r, _, _) =>
     {
         var result = new Solver()
             .SetNumberOfPrisoners(r.NumberOfPrisoners)

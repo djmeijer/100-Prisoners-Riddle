@@ -1,12 +1,10 @@
-using MoreLinq;
-
 namespace OneHundred_Prisoners_Riddle;
 
 public static class Statistics
 {
     public static IReadOnlyCollection<IReadOnlyCollection<Box>> GetLoops(BoxCollection boxes)
     {
-        var boxesMap = boxes.GetClosedBoxes().Select(boxes.OpenBoxNumber).ToDictionary(b => b.BoxNumber, b => b);
+        var boxesMap = boxes.GetBoxes();
         var unseenBoxes = new HashSet<Box>(boxesMap.Values);
         var loops = new List<IReadOnlyCollection<Box>>();
 

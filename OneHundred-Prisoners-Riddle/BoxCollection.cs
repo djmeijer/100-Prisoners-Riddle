@@ -6,34 +6,31 @@ public class BoxCollection
 {
     private readonly Dictionary<int, Box> _boxes;
     private HashSet<int> _closedBoxes;
-    private readonly HashSet<int> _closedBoxesOriginal;
-    private HashSet<int> _seenSlipNumbers;
+    private readonly HashSet<int> _seenSlipNumbers;
 
-    public BoxCollection(IEnumerable<Box> boxes)
+    public BoxCollection(IReadOnlyCollection<Box> boxes)
     {
-        _boxes = new Dictionary<int, Box>();
-        _closedBoxesOriginal = new HashSet<int>();
-        _seenSlipNumbers = new HashSet<int>();
+        _boxes = new Dictionary<int, Box>(boxes.Count);
+        _closedBoxes = new HashSet<int>(boxes.Count / 2);
+        _seenSlipNumbers = new HashSet<int>(boxes.Count / 2);
 
         boxes.ForEach(b =>
         {
             _boxes[b.BoxNumber] = b;
-            _closedBoxesOriginal.Add(b.BoxNumber);
+            _closedBoxes.Add(b.BoxNumber);
         });
-        _closedBoxes = new HashSet<int>(_closedBoxesOriginal);
     }
 
     public Box OpenBoxNumber(int boxNumber)
     {
         var box = _boxes[boxNumber];
-        if (_closedBoxes.Contains(boxNumber))
-        {
-            _closedBoxes.Remove(boxNumber);
-            _seenSlipNumbers.Add(box.SlipNumber);
-        }
+        _closedBoxes.Remove(boxNumber);
+        _seenSlipNumbers.Add(box.SlipNumber);
 
         return box;
     }
+
+    public IReadOnlyDictionary<int, Box> GetBoxes() => _boxes;
 
     public HashSet<int> GetClosedBoxes() => _closedBoxes;
 
@@ -41,8 +38,7 @@ public class BoxCollection
 
     public void Reset()
     {
-        _closedBoxes = new HashSet<int>();
-        _closedBoxes = new HashSet<int>(_closedBoxesOriginal);
-        _seenSlipNumbers = new HashSet<int>();
+        _boxes.Keys.ForEach(b => _closedBoxes.Add(b));
+        _seenSlipNumbers.Clear();
     }
 }
