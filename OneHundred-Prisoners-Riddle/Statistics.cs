@@ -37,7 +37,7 @@ public static class Statistics
     
     public static decimal GetTheoreticalProbability(Result result)
     {
-        if (string.Equals(result.FirstPersonStrategy, new BreakLongestCircleFirstPersonStrategy().Name, StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(result.FirstPersonStrategy, new BreakLongestCircleFirstPrisonerStrategy().Name, StringComparison.OrdinalIgnoreCase))
         {
             return 1;
         }

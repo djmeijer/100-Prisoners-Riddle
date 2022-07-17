@@ -3,7 +3,7 @@ using OneHundred_Prisoners_Riddle.Box;
 
 namespace OneHundred_Prisoners_Riddle.FirstPersonStrategy;
 
-public class RandomFirstPersonStrategy : IFirstPersonStrategy
+public class RandomFirstPrisonerStrategy : IFirstPrisonerStrategy
 {
     public BoxCollection Execute(BoxCollection boxes)
     {

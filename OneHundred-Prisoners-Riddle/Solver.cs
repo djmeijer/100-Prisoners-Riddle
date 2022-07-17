@@ -10,7 +10,7 @@ public class Solver
 {
     private int _numberOfPrisoners;
     private Func<IGroupStrategy> _groupsStrategyCreator;
-    private IFirstPersonStrategy _firstPersonStrategy;
+    private IFirstPrisonerStrategy _firstPrisonerStrategy;
     private int _repeats;
     private bool _debug;
 
@@ -26,9 +26,9 @@ public class Solver
         return this;
     }
 
-    public Solver SetFirstPersonStrategy(IFirstPersonStrategy firstPersonStrategy)
+    public Solver SetFirstPersonStrategy(IFirstPrisonerStrategy firstPrisonerStrategy)
     {
-        _firstPersonStrategy = firstPersonStrategy;
+        _firstPrisonerStrategy = firstPrisonerStrategy;
 
         return this;
     }
@@ -66,7 +66,7 @@ public class Solver
 
         timer.Stop();
 
-        return new Result(_numberOfPrisoners, _groupsStrategyCreator().Name, _firstPersonStrategy.Name, (decimal)totalRepeatsWithSuccess / _repeats, _repeats, timer.ElapsedMilliseconds);
+        return new Result(_numberOfPrisoners, _groupsStrategyCreator().Name, _firstPrisonerStrategy.Name, (decimal)totalRepeatsWithSuccess / _repeats, _repeats, timer.ElapsedMilliseconds);
     }
 
     private int SolveSequential(int maximumNumberOfSteps)
@@ -124,7 +124,7 @@ public class Solver
         {
             if (p == 0)
             {
-                boxCollection = _firstPersonStrategy.Execute(boxCollection);
+                boxCollection = _firstPrisonerStrategy.Execute(boxCollection);
             }
             
             for (var s = 0; s < maximumNumberOfSteps && !boxCollection.GetSeenSlipNumbers().Contains(p); s++)

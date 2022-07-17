@@ -2,7 +2,7 @@ using OneHundred_Prisoners_Riddle.Box;
 
 namespace OneHundred_Prisoners_Riddle.FirstPersonStrategy;
 
-public class DoNothingFirstPersonStrategy : IFirstPersonStrategy
+public class DoNothingFirstPrisonerStrategy : IFirstPrisonerStrategy
 {
     public BoxCollection Execute(BoxCollection boxes) => boxes;
 

@@ -2,7 +2,7 @@ using OneHundred_Prisoners_Riddle.Box;
 
 namespace OneHundred_Prisoners_Riddle.FirstPersonStrategy;
 
-public interface IFirstPersonStrategy
+public interface IFirstPrisonerStrategy
 {
     public BoxCollection Execute(BoxCollection boxes);
 

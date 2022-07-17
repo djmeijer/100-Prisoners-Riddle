@@ -3,4 +3,4 @@ using OneHundred_Prisoners_Riddle.GroupStrategy;
 
 namespace OneHundred_Prisoners_Riddle;
 
-public record RunInfo(int NumberOfPrisoners, Func<IGroupStrategy> GroupStrategy, IFirstPersonStrategy FirstPersonStrategy);
+public record RunInfo(int NumberOfPrisoners, Func<IGroupStrategy> GroupStrategy, IFirstPrisonerStrategy FirstPrisonerStrategy);
